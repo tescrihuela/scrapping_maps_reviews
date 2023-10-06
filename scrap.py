@@ -9,12 +9,17 @@ import time
 class_div_commentaire = "jJc9Ad"
 class_span_note = "fzvQIb"
 class_span_commentaire = "wiI7pd"
-temps_attente = 3
-nb_iterations = 12
+class_span_date = "xRkPPb"
+temps_attente = 6
+nb_iterations = 10
 
 ## Inputs
 endpoint_search = 'https://www.google.com/maps?output=search&q='
 hotels =[
+    {
+        "nom":"hotel les arcades",
+        "commune":"rouen"
+    },
     {
         "nom":"Refuge de platé",
         "commune" : "passy"
@@ -69,7 +74,7 @@ class Hotel():
     def get_reviews(self):
         liste_avis = []
 
-        driver = webdriver.Chrome()
+        driver = webdriver.Firefox()
         driver.maximize_window()
         driver.get(self.url)
 
@@ -96,16 +101,16 @@ class Hotel():
             try:
                 note= div_commentaire.find("span", {"class": class_span_note}).text
                 commentaire = div_commentaire.find("span", {"class": class_span_commentaire}).text
+                date = div_commentaire.find("span", {"class": class_span_date}).text
             except:
-                note, commentaire = "", ""
+                note, commentaire, date = "", "", ""
                 # commentaire = ""
             punaise = False
             if 'punaise' in commentaire.lower():
                 punaise = True
                 self.nb_comm_punaise_de_lits += 1
 
-            liste_avis.append({"note" : note, "commentaire" : commentaire, "punaise" : punaise})
-            # liste_avis.append({"commentaire" : commentaire, "punaise" : punaise})
+            liste_avis.append({"note" : note,"date": date, "commentaire" : commentaire, "punaise" : punaise})
 
         driver.quit()
 
@@ -124,7 +129,7 @@ class Hotel():
 
 
     def to_csv(self):
-        csv_columns = ["note", "commentaire", "punaise"]
+        csv_columns = ["note","date", "commentaire", "punaise"]
         try:
             with open(f"{self.nom}.csv", 'w',encoding = 'utf8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
