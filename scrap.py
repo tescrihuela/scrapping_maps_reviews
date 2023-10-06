@@ -10,7 +10,7 @@ class_div_commentaire = "jJc9Ad"
 class_span_note = "fzvQIb"
 class_span_commentaire = "wiI7pd"
 temps_attente = 3
-nb_iterations = 10
+nb_iterations = 12
 
 ## Inputs
 endpoint_search = 'https://www.google.com/maps?output=search&q='
